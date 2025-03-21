@@ -281,7 +281,8 @@ namespace XOX_game
 
             return tempYatay || tempDikey || tempCapraz;
         }
-
+        
+        
         private void RandomHareket(int symbol)
         {
 
@@ -294,9 +295,12 @@ namespace XOX_game
                     if (atakan[r, c] == 5)
                     {
                         boslist.Add((r, c));
+                        
                     }
                 }
             }
+
+            
 
             if (boslist.Count > 0)
             {
@@ -312,6 +316,9 @@ namespace XOX_game
 
         }
 
+
+
+        //Bilgisayarın sembolünü yerleştirme yeri
         private void SembolYerlestirme(int row, int col, int symbol)
         {
 
@@ -346,6 +353,21 @@ namespace XOX_game
 
         }
 
+        private bool Berabere()
+        {
+            int doluHücreSayisi = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (atakan[i, j] != 5) // Dolu hücre
+                    {
+                        doluHücreSayisi++;
+                    }
+                }
+            }
+            return doluHücreSayisi == 9; // 9 hücre dolduysa berabere
+        }
 
         private bool KazananKontrolEt()
         {
@@ -362,7 +384,15 @@ namespace XOX_game
             {
                 timer1.Stop();
                 int kazanan = yatayTespit ? yatayTespitSonucu : dikeyTespit ? dikeyTespitSonucu : caprazTespitSonucu;
-                string kazananSatir = kazanan == secilenKarakter ? "Oyuncu Kazandı!" : "Bilgisayar Kazandı!";
+                string kazananSatir;
+                if (kazanan == secilenKarakter)
+                {
+                    kazananSatir = "Oyuncu Kazandı!";
+                }
+                else
+                {
+                    kazananSatir = "Bilgisayar Kazandı!";
+                }
                 MessageBox.Show(kazananSatir);
 
                 DialogResult dr = MessageBox.Show("Oyunu yeniden başlatmak ister misiniz?", "Yeniden Başlat", MessageBoxButtons.YesNo);
@@ -370,8 +400,27 @@ namespace XOX_game
                 {
                     oyunuSifirla();
                 }
+                else
+                {
+                    this.Close();
+                }
                 return true; // Oyun bitti
             }
+            if (Berabere())
+            {
+                timer1.Stop(); // Timer'ı durdur
+                DialogResult dr1 = MessageBox.Show("Oyun berabere bitti tekrar oynamak ister misiniz?", "Yeniden başlat", MessageBoxButtons.YesNo);
+                if (dr1 == DialogResult.Yes)
+                {
+                    oyunuSifirla();
+                }
+                else
+                {
+                    this.Close();
+                }
+                return true;
+            }
+
 
             return false; // Oyun devam ediyor
         }
