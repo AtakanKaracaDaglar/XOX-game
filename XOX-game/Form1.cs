@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace XOX_game
@@ -17,8 +18,6 @@ namespace XOX_game
             tahtayiTemizle();
         }
 
-        private int baslayan;
-        private bool oyuncuTiklayabilirMi;
         private int siraKimde; // 0 / 1
         private bool secimSirasiMi = false;
 
@@ -31,20 +30,34 @@ namespace XOX_game
 
             if (baslayanSecimi == 0)
             {
-                MessageBox.Show("Başlayan Bilgisayar Seçildi");
-                //bilgisayar rastgele karakter seçecek
+                lbl_Gamer.Text = "Bilgisayar Seçildi";
+                // bilgisayar rastgele karakter seçecek
                 int bilgisayarKarakter = atakan.Next(0, 2);
 
                 int oyuncuKarakter = (bilgisayarKarakter == 0) ? 1 : 0;
 
-                secilenKarakter = oyuncuKarakter; //Oyuncuya kalan karakteri atıyoruz
-                siraKimde = 0; //ilk hamle bilgisayarın olacak
+                secilenKarakter = oyuncuKarakter; // Oyuncuya kalan karakteri atıyoruz
+                siraKimde = 0; // ilk hamle bilgisayarın olacak
+                if(oyuncuKarakter == 1)
+                {
+                    x_pct.Visible = true;
+                    o_pct.Visible = false;
+                }
+                else if (oyuncuKarakter == 0)
+                {
+                    o_pct.Visible = true;
+                    x_pct.Visible = false;
+                }
 
             }
             else if (baslayanSecimi == 1)
             {
-                MessageBox.Show("Başlayan Oyuncu Seçildi");
-                MessageBox.Show("Lütfen Taş Türünü Seçiniz");
+                lbl_Gamer.Text = "Oyuncu Seçildi";
+                if(oynanmaSayisi == 0 && secilenKarakter == 2)
+                {
+                    MessageBox.Show("Lütfen Taş Türünü Seçiniz");
+                }
+                
                 secimSirasiMi = true;
             }
 
@@ -152,10 +165,10 @@ namespace XOX_game
 
 
 
-        // OYUNUN BEL KEMİGİ <3 \\
+        // OYUNUN BEL KEMİGİ \\
 
 
-        private int oynanmaSayisi = 0; // Lütfen oynanma sayisini sürekli sıfırlamayı unutmayınız <3 XD
+        private int oynanmaSayisi = 0; // Lütfen oynanma sayisini sürekli sıfırlamayı unutmayınız
 
         //    1 = X   0 = O   \\
 
@@ -165,6 +178,7 @@ namespace XOX_game
         private void clooner(PictureBox atakan, Point lokasyon)
         {
             PictureBox kopyalaniyor = new PictureBox();
+
 
             kopyalaniyor.Image = atakan.Image;
             kopyalaniyor.Location = lokasyon;
@@ -179,27 +193,30 @@ namespace XOX_game
 
 
 
-        //yapay zeka yönetimi
+        // yapay zeka yönetimi
         private void AImove()
         {
-            const int O = 0;
-            const int X = 1;
+             //O = 0;
+             //X = 1;
 
             int AIsymbol = (secilenKarakter == 1) ? 0 : 1;
 
-            //kazanmayı dene
+            // kazanmayı dene
             if (TryWinningMove(AIsymbol))
             {
+                Thread.Sleep(1500); // oyuncu nefes alsın az.
                 sonrakiHamleGec();
                 return;
             }
-            //rakibin kazanmasını engelleme
+            // rakibin kazanmasını engelleme
             if (TryWinningMove(secilenKarakter, true))
             {
+                Thread.Sleep(1500);
                 sonrakiHamleGec();
                 return;
             }
-            //yoksa rastgele oyna
+            // yoksa rastgele oyna
+            Thread.Sleep(1500);
             RandomHareket(AIsymbol);
             sonrakiHamleGec();
 
@@ -318,7 +335,7 @@ namespace XOX_game
 
 
 
-        //Bilgisayarın sembolünü yerleştirme yeri
+        // Bilgisayarın sembolünü yerleştirme yeri
         private void SembolYerlestirme(int row, int col, int symbol)
         {
 
@@ -368,6 +385,7 @@ namespace XOX_game
             }
             return doluHücreSayisi == 9; // 9 hücre dolduysa berabere
         }
+        int score = 0;
 
         private bool KazananKontrolEt()
         {
@@ -388,11 +406,23 @@ namespace XOX_game
                 if (kazanan == secilenKarakter)
                 {
                     kazananSatir = "Oyuncu Kazandı!";
+                    score++;
+                    lbl_Score.Text = score.ToString();
                 }
                 else
                 {
                     kazananSatir = "Bilgisayar Kazandı!";
+                    if(score > 0)
+                    {
+                        score--;
+                    }
+                    else
+                    {
+                        score = 0;
+                    }
+                    lbl_Score.Text = score.ToString();
                 }
+
                 MessageBox.Show(kazananSatir);
 
                 DialogResult dr = MessageBox.Show("Oyunu yeniden başlatmak ister misiniz?", "Yeniden Başlat", MessageBoxButtons.YesNo);
@@ -438,7 +468,6 @@ namespace XOX_game
             else if (siraKimde == 1 && oynanmaSayisi == 0)
             {
                 oynanmaSayisi = 1;
-                MessageBox.Show("Sira Sizde");
             }
 
             KazananKontrolEt();
@@ -448,6 +477,10 @@ namespace XOX_game
         private void start_btn_Click(object sender, EventArgs e)
         {
 
+            if (secimSirasiMi == false)
+            {
+                start_btn.Enabled = false;
+            }
             
             baslayaniSec();
             timer1.Start();
@@ -458,23 +491,48 @@ namespace XOX_game
         private void oyunuSifirla()
         {
             tahtayiTemizle();
-            secimSirasiMi = false;
-            oynanmaSayisi = 0;
 
             // Panel üzerindeki PictureBox'ları temizle
             List<Control> silinecekler = new List<Control>();
+            List<Point> noktalarListesi = new List<Point>();
             foreach (Control ctrl in this.Controls)
             {
-                if (ctrl is PictureBox && (ctrl != x_ && ctrl != o_))  // Orijinal x_ ve o_ hariç
+               
+                if (ctrl is Panel)
                 {
-                    silinecekler.Add(ctrl);
+                    noktalarListesi.Add(ctrl.Location);
                 }
+
             }
+
+            foreach (Control ctrl in this.Controls)
+            {
+                if(ctrl is PictureBox)
+                {
+                    foreach (Point lokasyon in noktalarListesi)
+                    {
+                        if (ctrl.Location == lokasyon)
+                        {
+                            silinecekler.Add(ctrl);
+                        }
+                    }
+                }
+                
+            }
+            
             foreach (var item in silinecekler)
             {
                 this.Controls.Remove(item);
                 item.Dispose();
             }
+           
+
+            x_pct.Visible = true;
+            o_pct.Visible = true;
+            
+            baslayaniSec();
+            oynanmaSayisi = 0;
+
 
             timer1.Start();
         }
@@ -487,21 +545,24 @@ namespace XOX_game
             if (secimSirasiMi == true)
             {
                 secilenKarakter = 1; // X harfi
-                x_pct.Visible = false;
+                x_pct.Visible = true;
                 o_pct.Visible = false;
                 secimSirasiMi = false;
             }
+            
+            
         }
 
         private void o_pct_Click(object sender, EventArgs e)
         {
             if (secimSirasiMi == true)
             {
-                secilenKarakter = 0; // Y harfi
-                o_pct.Visible = false;
+                secilenKarakter = 0; // O harfi
+                o_pct.Visible = true;
                 x_pct.Visible = false;
                 secimSirasiMi = false;
             }
+            
         }
 
         private void panel1_Click(object sender, EventArgs e)
@@ -841,5 +902,99 @@ namespace XOX_game
                 MessageBox.Show("Sıra bilgisayarda");
             }
         }
+
+       
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 1000 satırlık kod olsun istedim. \\

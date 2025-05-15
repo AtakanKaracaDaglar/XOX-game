@@ -49,6 +49,10 @@
             this.start_btn = new System.Windows.Forms.Button();
             this.x_ = new System.Windows.Forms.PictureBox();
             this.o_ = new System.Windows.Forms.PictureBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lbl_Gamer = new System.Windows.Forms.Label();
+            this.lbl_Score = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.x_pct)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.o_pct)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.x_)).BeginInit();
@@ -236,11 +240,55 @@
             this.o_.TabStop = false;
             this.o_.Tag = "o_harfi";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label5.Location = new System.Drawing.Point(515, 464);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(75, 26);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Score:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label6.Location = new System.Drawing.Point(449, 506);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(141, 26);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Seçili oyuncu";
+            // 
+            // lbl_Gamer
+            // 
+            this.lbl_Gamer.AutoSize = true;
+            this.lbl_Gamer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.lbl_Gamer.Location = new System.Drawing.Point(603, 511);
+            this.lbl_Gamer.Name = "lbl_Gamer";
+            this.lbl_Gamer.Size = new System.Drawing.Size(14, 20);
+            this.lbl_Gamer.TabIndex = 10;
+            this.lbl_Gamer.Text = ".";
+            // 
+            // lbl_Score
+            // 
+            this.lbl_Score.AutoSize = true;
+            this.lbl_Score.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.lbl_Score.Location = new System.Drawing.Point(587, 464);
+            this.lbl_Score.Name = "lbl_Score";
+            this.lbl_Score.Size = new System.Drawing.Size(24, 26);
+            this.lbl_Score.TabIndex = 10;
+            this.lbl_Score.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1084, 553);
+            this.ClientSize = new System.Drawing.Size(777, 553);
+            this.Controls.Add(this.lbl_Score);
+            this.Controls.Add(this.lbl_Gamer);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.x_);
             this.Controls.Add(this.start_btn);
             this.Controls.Add(this.o_);
@@ -259,6 +307,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
@@ -294,6 +343,10 @@
         private System.Windows.Forms.Button start_btn;
         private System.Windows.Forms.PictureBox x_;
         private System.Windows.Forms.PictureBox o_;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lbl_Gamer;
+        private System.Windows.Forms.Label lbl_Score;
     }
 }
 
